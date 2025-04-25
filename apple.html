@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apple 财务报告 (2022-2025)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script type="module">
+        // 动态导入 Framer Motion
+        // 注意：在生产环境中，建议通过 npm/yarn 安装并打包
+        // 这里使用 skypack CDN 作为示例
+        // import { motion, stagger, animate, timeline, useScroll, useTransform } from "https://cdn.skypack.dev/framer-motion@10"; // 早期版本可能有效，但最新版推荐npm
+        // 鉴于CDN直接使用ES Module可能存在兼容性或复杂性问题，
+        // 对于纯HTML/JS项目，更简单的动画库如 AOS (Animate On Scroll) 或手动 Intersection Observer 可能更易于实现。
+        // 但遵从要求，尝试使用 Frame Motion 的基本动画功能，通过其简化的JS API（如果CDN提供）。
+        // 如果直接的 ES Module 导入在纯 HTML 中不稳定，我们将回退到使用 Intersection Observer 实现类似效果。
+
+        // --- 回退方案：使用 Intersection Observer 实现滚动动画 ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const animatedElements = document.querySelectorAll('.scroll-animate');
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate-in');
+                        // 可选：观察一次后停止观察
+                        // observer.unobserve(entry.target);
+                    } else {
+                        // 可选：离开视口时移除动画类，以便再次进入时播放
+                         entry.target.classList.remove('animate-in');
+                    }
+                });
+            }, {
+                threshold: 0.1 // 元素进入视口10%时触发
+            });
+
+            animatedElements.forEach(el => {
+                observer.observe(el);
+            });
+        });
+
+    </script>
+    <style>
+        /* 自定义字体和基础样式 */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+            background-color: #000;
+            color: #f0f0f0; /* 默认浅色文字 */
+            overflow-x: hidden; /* 防止水平滚动 */
+        }
+
+        /* 定义高亮色 */
+        :root {
+            --highlight-color: #2997ff; /* Apple Blue */
+            --highlight-color-rgb: 41, 151, 255;
+        }
+
+        /* 超大字体样式 */
+        .text-huge {
+            font-size: clamp(3rem, 10vw, 8rem); /* 响应式字体大小 */
+            line-height: 1;
+            font-weight: 700; /* 粗体 */
+        }
+        .text-large-metric {
+            font-size: clamp(2rem, 6vw, 4rem);
+            line-height: 1.1;
+            font-weight: 600;
+        }
+
+        /* 中文主要字体 */
+        .font-chinese-main {
+             font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; /* 优先使用中文字体 */
+             font-weight: 600; /* 加粗 */
+        }
+        /* 英文点缀字体 */
+        .font-english-sub {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-weight: 400; /* 常规 */
+            opacity: 0.8; /* 稍微降低透明度 */
+        }
+
+        /* Bento Grid 项的基本样式 */
+        .bento-item {
+            background-color: #1a1a1a; /* 深灰色背景 */
+            border-radius: 1.5rem; /* 圆角 */
+            padding: 1.5rem; /* 内边距 */
+            overflow: hidden; /* 防止内容溢出 */
+            position: relative;
+            transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
+        }
+        .bento-item:hover {
+            transform: translateY(-5px); /* 轻微上移效果 */
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+
+        /* 高亮色块和渐变 */
+        .highlight-bg {
+            background-color: var(--highlight-color);
+            color: #000; /* 高亮背景上的文字用深色 */
+        }
+        .highlight-text {
+            color: var(--highlight-color);
+        }
+        .highlight-gradient-bg {
+             background: linear-gradient(to top, rgba(var(--highlight-color-rgb), 0.5) 0%, rgba(var(--highlight-color-rgb), 0) 100%);
+             position: absolute;
+             bottom: 0;
+             left: 0;
+             right: 0;
+             height: 50%;
+             z-index: 0;
+             pointer-events: none; /* 不干扰鼠标事件 */
+        }
+         .highlight-gradient-corner {
+             background: radial-gradient(circle at top left, rgba(var(--highlight-color-rgb), 0.3) 0%, rgba(var(--highlight-color-rgb), 0) 50%);
+             position: absolute;
+             top: 0;
+             left: 0;
+             width: 100%;
+             height: 100%;
+             z-index: 0;
+             pointer-events: none;
+         }
+
+        /* SVG 图标和线条样式 */
+        .chart-line {
+            stroke: var(--highlight-color);
+            stroke-width: 3;
+            fill: none;
+        }
+        .chart-point {
+            fill: var(--highlight-color);
+            stroke: #1a1a1a; /* 背景色描边，使其突出 */
+            stroke-width: 2;
+        }
+        .icon-large {
+            font-size: 4rem;
+            opacity: 0.1; /* 图标作为背景点缀，降低透明度 */
+            position: absolute;
+            bottom: 1rem;
+            right: 1rem;
+            z-index: 0;
+            color: var(--highlight-color);
+        }
+
+        /* 滚动动画基础状态 (配合 Intersection Observer) */
+        .scroll-animate {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        /* 滚动动画激活状态 */
+        .scroll-animate.animate-in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 为不同的元素添加延迟 */
+        .scroll-animate:nth-child(1) { transition-delay: 0.1s; }
+        .scroll-animate:nth-child(2) { transition-delay: 0.2s; }
+        .scroll-animate:nth-child(3) { transition-delay: 0.3s; }
+        .scroll-animate:nth-child(4) { transition-delay: 0.4s; }
+        /* ...可以根据需要添加更多延迟 */
+
+    </style>
+</head>
+<body class="bg-black text-gray-100">
+
+    <div class="container mx-auto px-4 py-16 max-w-7xl">
+
+        <header class="mb-16 text-center scroll-animate">
+            <h1 class="text-huge font-chinese-main mb-2">财务概览</h1>
+            <p class="text-2xl font-english-sub text-gray-400">Financial Overview <span class="highlight-text">2022-2025</span></p>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
+
+            <div class="bento-item md:col-span-2 lg:col-span-2 scroll-animate">
+                 <div class="relative z-10">
+                    <h2 class="text-2xl font-chinese-main mb-1">总营收</h2>
+                    <p class="text-sm font-english-sub text-gray-400 mb-4">Total Revenue</p>
+                    <p class="text-large-metric font-chinese-main highlight-text">$1.5T+</p>
+                    <p class="text-base font-english-sub text-gray-300 mt-2">Cumulative (2022-2025 Est.)</p>
+                 </div>
+                 <i class="fas fa-chart-line icon-large"></i>
+                 <div class="highlight-gradient-corner"></div>
+            </div>
+
+            <div class="bento-item scroll-animate">
+                <div class="relative z-10">
+                    <h2 class="text-xl font-chinese-main mb-1">净利润</h2>
+                    <p class="text-xs font-english-sub text-gray-400 mb-3">Net Profit</p>
+                    <p class="text-3xl font-chinese-main highlight-text">$350B+</p>
+                    <p class="text-sm font-english-sub text-gray-300 mt-1">Cumulative</p>
+                </div>
+                 <i class="fas fa-piggy-bank icon-large" style="opacity: 0.05;"></i>
+                 <div class="highlight-gradient-bg"></div>
+            </div>
+
+            <div class="bento-item scroll-animate">
+                 <div class="relative z-10">
+                    <h2 class="text-xl font-chinese-main mb-1">iPhone</h2>
+                    <p class="text-xs font-english-sub text-gray-400 mb-3">Core Business</p>
+                    <p class="text-3xl font-chinese-main">主导地位</p>
+                    <p class="text-sm font-english-sub text-gray-300 mt-1">Dominant Market Share</p>
+                 </div>
+                  <i class="fas fa-mobile-screen-button icon-large"></i>
+            </div>
+
+            <div class="bento-item md:col-span-1 lg:col-span-2 scroll-animate">
+                 <div class="relative z-10">
+                    <h2 class="text-2xl font-chinese-main mb-1">服务增长</h2>
+                    <p class="text-sm font-english-sub text-gray-400 mb-4">Services Growth</p>
+                    <svg viewBox="0 0 100 50" class="w-full h-24">
+                        <polyline class="chart-line" points="5,45 30,25 55,35 80,10 95,15" />
+                        <circle class="chart-point" cx="5" cy="45" r="3" />
+                        <circle class="chart-point" cx="30" cy="25" r="3" />
+                        <circle class="chart-point" cx="55" cy="35" r="3" />
+                        <circle class="chart-point" cx="80" cy="10" r="3" />
+                        <circle class="chart-point" cx="95" cy="15" r="3" />
+                    </svg>
+                    <p class="text-base font-english-sub text-gray-300 mt-2 text-right">Consistent YoY Increase</p>
+                 </div>
+                 <div class="highlight-gradient-bg" style="height: 30%;"></div>
+            </div>
+
+             <div class="bento-item scroll-animate">
+                <div class="relative z-10">
+                    <h2 class="text-xl font-chinese-main mb-1">研发创新</h2>
+                    <p class="text-xs font-english-sub text-gray-400 mb-3">R&D Investment</p>
+                    <p class="text-3xl font-chinese-main highlight-text">$100B+</p>
+                     <p class="text-sm font-english-sub text-gray-300 mt-1">Fueling Future Tech</p>
+                </div>
+                 <i class="fas fa-flask-vial icon-large" style="opacity: 0.07;"></i>
+            </div>
+
+             <div class="bento-item highlight-bg scroll-animate">
+                <div class="relative z-10">
+                    <h2 class="text-xl font-chinese-main mb-1 text-black">2025 展望</h2>
+                    <p class="text-xs font-english-sub text-gray-900 mb-3">Outlook</p>
+                    <p class="text-3xl font-chinese-main text-black">持续增长</p>
+                     <p class="text-sm font-english-sub text-gray-800 mt-1">Continued Growth Expected</p>
+                </div>
+                 <i class="fas fa-arrow-trend-up icon-large" style="color: rgba(0,0,0,0.1);"></i>
+            </div>
+
+             <div class="bento-item scroll-animate">
+                <div class="relative z-10">
+                    <h2 class="text-xl font-chinese-main mb-1">可穿戴与家居</h2>
+                    <p class="text-xs font-english-sub text-gray-400 mb-3">Wearables & Home</p>
+                    <p class="text-3xl font-chinese-main">生态扩展</p>
+                     <p class="text-sm font-english-sub text-gray-300 mt-1">Ecosystem Expansion</p>
+                </div>
+                 <i class="fas fa-headphones-simple icon-large"></i>
+                 <div class="highlight-gradient-corner" style="background: radial-gradient(circle at bottom right, rgba(var(--highlight-color-rgb), 0.2) 0%, rgba(var(--highlight-color-rgb), 0) 60%);"></div>
+            </div>
+
+             <div class="bento-item scroll-animate">
+                <div class="relative z-10">
+                    <h2 class="text-xl font-chinese-main mb-1">Mac</h2>
+                    <p class="text-xs font-english-sub text-gray-400 mb-3">Silicon Power</p>
+                    <p class="text-3xl font-chinese-main highlight-text">性能飞跃</p>
+                     <p class="text-sm font-english-sub text-gray-300 mt-1">Performance Leap</p>
+                </div>
+                 <i class="fas fa-laptop icon-large" style="opacity: 0.06;"></i>
+            </div>
+
+             <div class="bento-item md:col-span-2 lg:col-span-2 scroll-animate">
+                 <div class="relative z-10">
+                    <h2 class="text-2xl font-chinese-main mb-1">全球足迹</h2>
+                    <p class="text-sm font-english-sub text-gray-400 mb-4">Global Presence</p>
+                    <div class="flex justify-around items-center h-24">
+                         <div class="text-center">
+                             <i class="fas fa-flag-usa text-3xl highlight-text mb-1"></i>
+                             <p class="text-xs font-english-sub">Americas</p>
+                         </div>
+                          <div class="text-center">
+                             <i class="fas fa-earth-europe text-3xl highlight-text mb-1"></i>
+                             <p class="text-xs font-english-sub">Europe</p>
+                         </div>
+                          <div class="text-center">
+                             <i class="fas fa-earth-asia text-3xl highlight-text mb-1"></i>
+                             <p class="text-xs font-english-sub">Greater China</p>
+                         </div>
+                         <div class="text-center">
+                             <i class="fas fa-globe text-3xl highlight-text mb-1"></i>
+                             <p class="text-xs font-english-sub">Rest of APAC</p>
+                         </div>
+                    </div>
+                    <p class="text-base font-english-sub text-gray-300 mt-2 text-center">Strong performance across regions</p>
+                 </div>
+                 <div class="highlight-gradient-bg" style="height: 40%;"></div>
+            </div>
+
+
+        </div> <footer class="mt-16 text-center text-gray-500 text-sm scroll-animate">
+            <p class="font-english-sub">Data presented is illustrative and based on estimates for 2022-2025.</p>
+            <p class="font-chinese-main mt-1">数据为模拟展示，基于 2022-2025 年预估。</p>
+        </footer>
+
+    </div>
+
+    <script>
+        // Placeholder for any additional JS logic if needed
+        console.log("Apple Finance Report Page Loaded");
+
+        // Example: Smooth scroll for anchor links (if any)
+        // document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        //     anchor.addEventListener('click', function (e) {
+        //         e.preventDefault();
+        //         document.querySelector(this.getAttribute('href')).scrollIntoView({
+        //             behavior: 'smooth'
+        //         });
+        //     });
+        // });
+    </script>
+
+</body>
+</html>
